@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movie Search Engine III</title>
+    <style>
+        body {
+  background: lightblue url("img_tree.gif") no-repeat fixed center;
+    }
+h1{
+    text-align: center;
+
+}
+
+#parent > div{
+      border: 3px solid black;
+      width: 400px;
+      background-color: white;
+}
+#parent > div > p:nth-child(1){
+      font-size: 30px;
+      font-weight: 900;
+}
+span{
+    margin-left: 10px;
+    color: blueviolet;
+}
+img{
+   width: 100%; 
+}
+p{
+    font-weight: 700;
+}
+#parent{
+    position: relative;
+    top: 100px;
+    left: 550px;
+    
+}
+#moviename{
+    text-align: center;
+}
+#movie{
+    position: relative;
+   
+    left: 600px;
+}
+#search{
+    position: relative;
+   
+    left: 610px; 
+}
+    </style>
+</head>
+<body>
+    <h1>Movie Search Engine III</h1>
+    <input   id="movie"   type="text"   placeholder="Enter movie name"/>
+    <button  id="search" onclick="get()">Search</button>
+    <div id="parent"> </div>
+    <script>
+ //http://www.omdbapi.com/?i=tt3896198&apikey=3c59be
+ //http://www.omdbapi.com/?apikey=bfe0c0b4&t=${movie}
+      async function get(){
+          try{
+        let movie = document.getElementById('movie').value
+
+        let res = await fetch(`http://www.omdbapi.com/?apikey=bfe0c0b4&t=${movie}`)
+
+        let data= await res.json()
+
+        searchmovie(data)
+        console.log('data:',data)
+        console.log('data:',data.Response)
+        if( data.Response == 'False'){
+        error()
+            }
+          }
+          catch(e){
+            error(e)
+             console.log(' e:',  e)
+          }
+      }
+      
+
+  let container = document.getElementById('parent')
+ function searchmovie(product){
+      container.innerHTML = null
+    let div = document.createElement('div')
+
+    let moviename = document.createElement('p')
+    moviename.innerText = product.Title
+    moviename.setAttribute('id','moviename')
+
+    let Year = document.createElement('span')
+    Year.innerText = product.Year
+
+    let Runtime = document.createElement('span')
+    Runtime.innerText = product.Runtime
+    
+
+    let img =  document.createElement('img')
+    img.src = product.Poster
+
+    let plot = document.createElement('p')
+    plot.innerText = product.Plot
+
+    let Director = document.createElement('p')
+
+    Director.innerText = 'Director: '+product.Director
+    
+
+
+    let Writer = document.createElement('p')
+    Writer.innerText = 'Writer: ' +product.Writer
+
+    let Actors = document.createElement('p')
+    Actors.innerText = 'Actors: '+ product.Actors
+
+    let IMDB = document.createElement('p')
+    IMDB.innerText = 'IMDB: '+ product.imdbRating
+
+    let Released = document.createElement('p')
+    Released.innerText = 'Released Date: '+ product.Released
+
+    if(+(product.imdbRating) > 8.5 ){
+        let recommended =  document.createElement('h1')
+        recommended.innerText = 'Recommended'
+        recommended.style.backgroundColor = 'red'
+        recommended.style.color = 'white'
+        div.append(recommended)
+    }
+
+    div.append( moviename,img,plot,Year,Runtime,Director, Writer,Actors,IMDB,Released)
+
+    container.append(div) 
+ }
+
+function error(){
+    container.innerHTML = null 
+    let div = document.createElement('div')
+
+    let img =  document.createElement('img')
+    img.src = 'https://c.tenor.com/FcVg5W9zZJQAAAAM/error.gif'
+
+     div.append(img)
+
+     container.append(div)
+}
+
+    </script>
+</body>
+</html>

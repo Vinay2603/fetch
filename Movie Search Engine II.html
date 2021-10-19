@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movie Search Engine II</title>
+    <style>
+h1{
+    text-align: center;
+
+}
+
+#parent > div{
+      border: 3px solid black;
+      width: 400px;
+      position: relative;
+     left:550px;
+
+     top: 100px;
+}
+#parent > div > p:nth-child(1){
+      font-size: 30px;
+      font-weight: 900;
+}
+span{
+    margin-left: 10px;
+    color: blueviolet;
+}
+img{
+   width: 100%; 
+}
+p{
+    font-weight: 700;
+}
+    </style>
+</head>
+<body>
+    <h1>Movie Search Engine II</h1>
+    <input   id="movie"   type="text"   placeholder="Enter movie name"/>
+    <button  id="search" onclick="get()">Search</button>
+    <div id="parent"> </div>
+    <script>
+ //http://www.omdbapi.com/?i=tt3896198&apikey=3c59be
+     
+ async function get(){
+        
+        let movie = document.getElementById('movie').value
+        try{
+        let res = await fetch(`http://www.omdbapi.com/?apikey=bfe0c0b4&t=${movie}`)
+
+        let data= await res.json()
+        console.log('data:',data)
+       
+        searchmovie(data)
+        }catch(e){
+            alert('not found')
+            console.log('e:',e)
+            error(e)
+        }
+      }
+   /*    
+fetch(`http://www.omdbapi.com/?apikey=bfe0c0b4&t=${movie}`)
+.then(function(res){
+
+   return  res.json()
+    //console.log('res:',res)
+})
+.then(function(res){
+    searchmovie(res)
+        console.log('res:',res) 
+    })
+.catch(function(err){
+
+    error(err)
+
+})
+*/
+  let container = document.getElementById('parent')
+ function searchmovie(product){
+    container.innerHTML = null 
+
+    let div = document.createElement('div')
+
+    let moviename = document.createElement('p')
+    moviename.innerText = product.Title
+
+    let Year = document.createElement('span')
+    Year.innerText = product.Year
+
+    let Runtime = document.createElement('span')
+    Runtime.innerText = product.Runtime
+    
+
+    let img =  document.createElement('img')
+    img.src = product.Poster
+
+    let plot = document.createElement('p')
+    plot.innerText = product.Plot
+
+    let Director = document.createElement('p')
+    Director.innerText = 'Director: '+product.Director
+
+    let Writer = document.createElement('p')
+    Writer.innerText = 'Writer: ' +product.Writer
+
+    let Actors = document.createElement('p')
+    Actors.innerText = 'Actors: '+ product.Actors
+
+    let IMDB = document.createElement('p')
+    IMDB.innerText = 'IMDB: '+ product.imdbRating
+
+    let Released = document.createElement('p')
+    Released.innerText = 'Released Date: '+ product.Released
+
+    div.append( moviename,img,plot,Year,Runtime,Director, Writer,Actors,IMDB,Released)
+
+    container.append(div) 
+ }
+
+function error(e){
+    container.innerHTML = null 
+    let div = document.createElement('div')
+
+    let img =  document.createElement('img')
+    img.src = 'https://media4.giphy.com/media/26n6WywJyh39n1pBu/200w.webp?cid=ecf05e47d9c7ymmesbidbdess0g8vd3nxhgrt00t7p1fqdr8&rid=200w.webp&ct=g'
+
+     div.append(img)
+
+     container.append(div)
+}
+
+    </script>
+</body>
+</html>
